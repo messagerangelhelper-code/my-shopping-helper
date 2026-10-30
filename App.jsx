@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { pointTo } from "./highlight.js";
 import { BRAND, GROUPS, STORES, DEFAULT_STORES, storeLink } from "./brand.js";
 import { loadData, saveData } from "./storage.js";
 import { supabase } from "./account.js";
@@ -99,6 +100,9 @@ export default function App() {
   const [view, setView] = useState("home"); // home | list | stores | restock | premium | settings
   const [query, setQuery] = useState("");
   const [searched, setSearched] = useState("");
+  const answerRef = useRef(null);
+  const [jump, setJump] = useState(0);
+  useEffect(() => { if (jump) pointTo(answerRef.current); }, [jump]);
   const [showMore, setShowMore] = useState(false);
   const [newItem, setNewItem] = useState("");
   const [openItem, setOpenItem] = useState(null);
@@ -147,6 +151,8 @@ export default function App() {
     setQuery(s);
     setSearched(s);
     setShowMore(false);
+    setJump((n) => n + 1);
+    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
     update((d) => ({ ...d, recent: [s, ...(d.recent || []).filter((r) => r.toLowerCase() !== s.toLowerCase())].slice(0, 8) }));
   }
   function addToList(text, listId = list.id) {
@@ -430,7 +436,8 @@ export default function App() {
         </section>
 
         {searched && (
-          <section className="card results">
+          <section ref={answerRef} className="card results answer" aria-live="polite">
+            <p className="answer-tag">👉 Your answer</p>
             <div className="row-between">
               <h2>“{searched}” at my stores</h2>
               <button type="button" className="btn-secondary small-btn" onClick={() => addToList(searched)}>+ Add to my list</button>
