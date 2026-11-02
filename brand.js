@@ -16,6 +16,8 @@ export const GROUPS = [
   { id: "home", name: "Furniture & home", icon: "🛋️" },
   { id: "discount", name: "Dollar & discount", icon: "💵" },
   { id: "pharmacy", name: "Pharmacy & everyday", icon: "💊" },
+  { id: "clothing", name: "Clothing & shoes", icon: "👕" },
+  { id: "pets", name: "Pets", icon: "🐾" },
 ];
 
 // Each store opens its own search, so prices and stock are always current.
@@ -46,7 +48,7 @@ export const STORES = [
   // Furniture & home
   { id: "wayfair", name: "Wayfair", group: "home", search: (s) => `https://www.wayfair.com/keyword.php?keyword=${q(s)}`, affiliate: null },
   { id: "ashley", name: "Ashley", group: "home", search: (s) => `https://www.ashleyfurniture.com/search/?q=${q(s)}`, affiliate: null },
-  { id: "roomstogo", name: "Rooms To Go", group: "home", search: (s) => `https://www.roomstogo.com/search?query=${q(s)}`, affiliate: null },
+  { id: "roomstogo", name: "Rooms To Go – pick your store", group: "home", note: "Opens their store picker first", search: (s) => `https://www.roomstogo.com/search?query=${q(s)}`, affiliate: null },
   { id: "ikea", name: "IKEA", group: "home", search: (s) => `https://www.ikea.com/us/en/search/?q=${q(s)}`, affiliate: null },
 
   // Dollar & discount
@@ -58,6 +60,12 @@ export const STORES = [
   // Pharmacy & everyday
   { id: "walgreens", name: "Walgreens", group: "pharmacy", search: (s) => `https://www.walgreens.com/search/results.jsp?Ntt=${q(s)}`, affiliate: null },
   { id: "cvs", name: "CVS", group: "pharmacy", search: (s) => `https://www.cvs.com/search?searchTerm=${q(s)}`, affiliate: null },
+
+  // Clothing & shoes
+  { id: "ross", name: "Ross", group: "clothing", note: "In-store only: opens their store finder", search: () => "https://www.rossstores.com/store-locator/", affiliate: null },
+
+  // Pets
+  { id: "petsmart", name: "PetSmart", group: "pets", search: (s) => `https://www.petsmart.com/search/?q=${q(s)}`, affiliate: null },
 ];
 
 // Stores turned on for someone who hasn't chosen yet.

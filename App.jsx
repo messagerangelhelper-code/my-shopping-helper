@@ -195,7 +195,7 @@ export default function App() {
             <input type="checkbox" checked={!!data.bigText} onChange={(e) => update((d) => ({ ...d, bigText: e.target.checked }))} />
             <span>Bigger text</span>
           </label>
-          <button type="button" className="btn-secondary" onClick={() => go("stores")}>Choose my stores</button>
+          <button type="button" className="btn-secondary" onClick={() => go("stores")}>Pick your stores</button>
           <p className="muted small">Your lists and stores are saved on this phone.</p>
         </section>
         <Account premium={premium} />
@@ -206,7 +206,7 @@ export default function App() {
       <>
         <button type="button" className="link back" onClick={() => go("home")}>← Back</button>
         <section className="card hero">
-          <h1>My stores</h1>
+          <h1>The Stores</h1>
           <p className="muted">Pick the stores you shop at. They show first when you search. The rest stay one tap away under "More stores".</p>
         </section>
         {GROUPS.map((g) => (
@@ -341,7 +341,7 @@ export default function App() {
                       <span className="item-name">{i.name}</span>
                       {value && <span className="item-best">Best value: {storeById(value.p.store)?.name}, {fmtPer(value.u.value)} per {value.u.per}</span>}
                       {best && (!value || value.p.store !== best.store) && <span className={value ? "item-low" : "item-best"}>Lowest price: ${best.price.toFixed(2)} at {storeById(best.store)?.name}</span>}
-                      {!i.got && <span className="muted small">{isOpen ? "Hide stores ▲" : "Find it at my stores ▼"}</span>}
+                      {!i.got && <span className="muted small">{isOpen ? "Hide stores ▲" : "Find it at your stores ▼"}</span>}
                     </button>
                     <button type="button" className="link danger small" aria-label={`Remove ${i.name}`} onClick={() => update((d) => ({ ...d, lists: d.lists.map((l) => (l.id === list.id ? { ...l, items: l.items.filter((x) => x.id !== i.id) } : l)) }))}>✕</button>
                   </div>
@@ -430,7 +430,14 @@ export default function App() {
           </form>
           {!searched && (data.recent || []).length > 0 && (
             <div className="chips">
-              {data.recent.map((r) => <button key={r} type="button" className="chip" onClick={() => runSearch(r)}>{r}</button>)}
+              {data.recent.map((r) => (
+                <span key={r} className="chip-wrap">
+                  <button type="button" className="chip" onClick={() => runSearch(r)}>{r}</button>
+                  <button type="button" className="chip-x" aria-label={`Remove ${r}`}
+                    onClick={() => update((d) => ({ ...d, recent: (d.recent || []).filter((x) => x !== r) }))}>✕</button>
+                </span>
+              ))}
+              <button type="button" className="link small" onClick={() => update((d) => ({ ...d, recent: [] }))}>Clear all</button>
             </div>
           )}
         </section>
@@ -439,7 +446,7 @@ export default function App() {
           <section ref={answerRef} className="card results answer" aria-live="polite">
             <p className="answer-tag">👉 Your answer</p>
             <div className="row-between">
-              <h2>“{searched}” at my stores</h2>
+              <h2>“{searched}” at your stores</h2>
               <button type="button" className="btn-secondary small-btn" onClick={() => addToList(searched)}>+ Add to my list</button>
             </div>
             <GroupedStores query={searched} ids={myIds} />
@@ -466,7 +473,7 @@ export default function App() {
 
         <nav className="quick-nav" aria-label="Your tools">
           <button type="button" className="qn" onClick={() => go("list")}><span aria-hidden="true">🛒</span>My list{openCount > 0 && <span className="count">{openCount}</span>}</button>
-          <button type="button" className="qn" onClick={() => go("stores")}><span aria-hidden="true">🏬</span>My stores</button>
+          <button type="button" className="qn" onClick={() => go("stores")}><span aria-hidden="true">🏬</span>The Stores</button>
           <button type="button" className="qn wide" onClick={() => go("restock")}><span aria-hidden="true">🔁</span>Restock reminders{!premium && <span className="pill-premium">Premium</span>}</button>
         </nav>
 
